@@ -1,49 +1,61 @@
 package com.example.demo.dao;
 
+import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Repository;
+
 import com.example.demo.model.Teacher;
+import com.example.demo.model.TeacherSocialMedia;
 
 
-
-public class TeacherDaoImpl implements TeacherDao {
+@Repository
+@Transactional
+public class TeacherDaoImpl extends AbstractSession implements TeacherDao {
 	
-	private PlatziSession platziSession;
-	
-
-	public TeacherDaoImpl() {
-		platziSession = new PlatziSession();
-	}
-
 	public void saveTeacher(Teacher teacher) {
-		// TODO Auto-generated method stub
-		platziSession.getSession().persist(teacher);
-		platziSession.getSession().getTransaction().commit();
+		getSession().persist(teacher);
 	}
 
 	public void deleteTeacherById(Long idTeacher) {
-		// TODO Auto-generated method stub
-		
+		Teacher teacher = findById(idTeacher);
+		if(idTeacher != null){
+			
+			/**
+			 * Eliminamos todas las socialMedias de un Teacher
+			 */
+			Iterator<TeacherSocialMedia> i = teacher.getTeacherSocialMedias().iterator();
+			while (i.hasNext()) {
+				TeacherSocialMedia teacherSocialMedia = i.next();
+				i.remove();
+				getSession().delete(teacherSocialMedia);
+			}
+			teacher.getTeacherSocialMedias().clear();
+			/**
+			 * Eliminamos nuestro Teacher
+			 */
+			getSession().delete(teacher);
+		}
 	}
 
 	public void updateTeacher(Teacher teacher) {
-		// TODO Auto-generated method stub
-		
+		getSession().update(teacher);
 	}
 
 	public List<Teacher> findAllTeachers() {
-		// TODO Auto-generated method stub
-		return platziSession.getSession().createQuery("from Teacher").list();
+		return getSession().createQuery("from Teacher").list();
 	}
 
 	public Teacher findById(Long idTeacher) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().get(Teacher.class, idTeacher);
 	}
 
 	public Teacher findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Teacher) getSession().createQuery(
+				"from Teacher where name = :name")
+				.setParameter("name", name).uniqueResult();
 	}
 
 }
