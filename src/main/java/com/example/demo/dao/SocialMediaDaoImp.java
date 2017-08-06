@@ -21,7 +21,7 @@ public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao
 	@Override
 	public void saveSocialMedia(SocialMedia socialMedia) {
 		// TODO Auto-generated method stub
-		
+		getSession().save(socialMedia);
 	}
 
 	@Override
@@ -54,7 +54,8 @@ public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao
 	@Override
 	public SocialMedia findByName(String name) {
 		// TODO Auto-generated method stub
-		return (SocialMedia) getSession().createQuery("from SocialMedia where name :name")
+		return (SocialMedia) getSession().createQuery(
+				"from SocialMedia where name = :name")
 				.setParameter("name", name).uniqueResult();
 	}
 

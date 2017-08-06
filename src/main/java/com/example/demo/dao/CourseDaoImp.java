@@ -47,7 +47,7 @@ public class CourseDaoImp extends AbstractSession implements CourseDao {
 	@Override
 	public Course findByName(String name) {
 		return (Course) getSession().createQuery(
-				"from Course where name :name")
+				"from Course where name = :name")
 				.setParameter("name", name).uniqueResult();
 	}
 
