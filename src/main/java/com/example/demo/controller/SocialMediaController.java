@@ -82,7 +82,7 @@ public class SocialMediaController {
 	}
 	
 	//UPDATE
-	@RequestMapping(value="/socialMedias/{id}", method= RequestMethod.PATCH, headers = "Accept=aplication/json")
+	@RequestMapping(value="/socialMedias/{id}", method= RequestMethod.PATCH)
 	public ResponseEntity<SocialMedia> updateSocialMedia(@PathVariable("id") Long idSocialMedia, @RequestBody SocialMedia socialMedia){
 		
 		if(idSocialMedia == null || idSocialMedia <= 0){
