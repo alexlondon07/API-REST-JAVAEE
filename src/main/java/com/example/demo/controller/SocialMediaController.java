@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SocialMediaController {
 	
 	@Autowired
-	SocialMediaService _socialMediaService;
+	private SocialMediaService _socialMediaService;
 
 	//GET
 	@RequestMapping(value="/socialMedias", method = RequestMethod.GET, headers= "Accept=application/json")
@@ -48,8 +48,6 @@ public class SocialMediaController {
 			socialMedias.add(socialMedia);
 			return new ResponseEntity<List<SocialMedia>>(socialMedias, HttpStatus.OK);
 		}
-		
-
 	}
 	
 	//GET

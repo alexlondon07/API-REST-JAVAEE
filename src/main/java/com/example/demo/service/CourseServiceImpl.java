@@ -12,7 +12,7 @@ import com.example.demo.model.Course;
 
 @Service("courseService")
 @Transactional
-public abstract class CourseServiceImpl implements CourseService {
+public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	private CourseDao _courseDao;
