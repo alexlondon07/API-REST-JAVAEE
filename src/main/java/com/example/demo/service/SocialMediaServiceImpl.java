@@ -59,5 +59,4 @@ public class SocialMediaServiceImpl implements SocialMediaService {
 		// TODO Auto-generated method stub
 		return _socialMediaDao.findSocialMediaByIdAndName(idSocialMedia, nickname);
 	}
-
 }

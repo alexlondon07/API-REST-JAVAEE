@@ -20,7 +20,7 @@ import com.example.demo.service.CourseService;
 public class CourseController {
 	
 	@Autowired
-	private CourseService _courseService;
+	CourseService _courseService;
 	
 	//GET
 	@RequestMapping(value="/courses", method = RequestMethod.GET, headers = "Accept=application/json")
