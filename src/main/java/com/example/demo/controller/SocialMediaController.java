@@ -73,28 +73,23 @@ public class SocialMediaController {
 
 	// ------------------- POST SocialMedia-----------------------------------------
 
-	@RequestMapping(value = "/socialMedias", method = RequestMethod.POST, headers = "Accept=aplication/json")
-	public ResponseEntity<?> createSocialMedia(@RequestBody SocialMedia socialMedia,
-			UriComponentsBuilder uriComponentsBuilder) {
+	@RequestMapping(value = "/socialMedias", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<?> createSocialMedia(@RequestBody SocialMedia socialMedia, UriComponentsBuilder uriComponentsBuilder) {
 		logger.info("Creating SocialMedia : {}", socialMedia);
 
 		if (socialMedia.getName().equals(null) || socialMedia.getName().isEmpty()) {
 			return new ResponseEntity(new CustomErrorType("SocialMedia name is required"), HttpStatus.CONFLICT);
 		}
 
-		if (_socialMediaService.findByName(socialMedia.getName()) != null) {
-			logger.error("Unable to create. A SocialMedia with name {} already exist", socialMedia.getName());
-
+		if(isSocialMediaExist(socialMedia)){
 			return new ResponseEntity(
 					new CustomErrorType("Unable to create. A SocialMedia with name " + socialMedia.getName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-
 		_socialMediaService.saveSocialMedia(socialMedia);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uriComponentsBuilder.path("/v1/socialMedias{id}")
-				.buildAndExpand(socialMedia.getIdSocialMedia()).toUri());
+		headers.setLocation(uriComponentsBuilder.path("/v1/socialMedias{id}").buildAndExpand(socialMedia.getIdSocialMedia()).toUri());
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
@@ -106,6 +101,16 @@ public class SocialMediaController {
 		
 		if (idSocialMedia == null || idSocialMedia <= 0) {
 			return new ResponseEntity(new CustomErrorType("idSocialMedia is required"), HttpStatus.CONFLICT);
+		}
+		
+		if (socialMedia.getName().equals(null) || socialMedia.getName().isEmpty()) {
+			return new ResponseEntity(new CustomErrorType("SocialMedia name is required"), HttpStatus.CONFLICT);
+		}
+		
+		if(isSocialMediaExist(socialMedia)){
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A SocialMedia with name " + socialMedia.getName() + " already exist."),
+					HttpStatus.CONFLICT);
 		}
 
 		SocialMedia currentSocialMedia = _socialMediaService.findById(idSocialMedia);
@@ -124,7 +129,7 @@ public class SocialMediaController {
 
 	// ------------------- DELETE SocialMedia -----------------------------------------
 
-	@RequestMapping(value = "/socialMedias/{id}", method = RequestMethod.DELETE, headers = "Accept=aplication/json")
+	@RequestMapping(value = "/socialMedias/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<SocialMedia> deleteSocialMedia(@PathVariable("id") Long idSocialMedia) {
 		logger.info("Fetching & Deleting SocialMedia with id {}", idSocialMedia);
 		
@@ -141,6 +146,20 @@ public class SocialMediaController {
 
 		_socialMediaService.deleteSocialMediaById(idSocialMedia);
 		return new ResponseEntity<SocialMedia>(HttpStatus.OK);
+	}
+	
+
+	/**
+	 * Validate if exists a SocialMedia
+	 * @param socialMedia
+	 * @return
+	 */
+	public boolean isSocialMediaExist(SocialMedia socialMedia){
+		if(_socialMediaService.findByName(socialMedia.getName()) !=null){
+			logger.error("Unable to create. A SocialMedia with name {} already exist", socialMedia.getName());
+			return true;
+		}
+		return false;
 	}
 
 }
