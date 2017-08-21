@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,40 +15,56 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.model.Course;
 import com.example.demo.service.CourseService;
+import com.example.demo.util.CustomErrorType;
 
 
 @Controller
 @RequestMapping("/v1")
 public class CourseController {
+	public static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 	
 	@Autowired
 	CourseService _courseService;
 	
-	//GET
+	// ------------------- GET Courses-----------------------------------------
+	
 	@RequestMapping(value="/courses", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<Course>> getCourses(@RequestParam(value="name", required=false) String name){
+	public ResponseEntity<List<Course>> getCourses(@RequestParam(value="name", required=false) String name, @RequestParam(value = "id_teacher", required = false) Long id_teacher){
 		
 		List<Course> courses = new ArrayList<>();
 		
-		if(name == null){
-			courses = _courseService.findAllCourses();
-			
+		if(id_teacher !=null){
+			courses = _courseService.findByIdTeacher(id_teacher);
 			if(courses.isEmpty()){
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
-			return new ResponseEntity<List<Course>>(courses, HttpStatus.OK);
-		}else{
+		}
+		
+		if(name != null){
 			Course course = _courseService.findByName(name);
 			if(course == null){
-				return new ResponseEntity("Course not found", HttpStatus.NOT_FOUND);
+				return new ResponseEntity(HttpStatus.NOT_FOUND);
 			}
 			courses.add(course);
-			return new ResponseEntity<List<Course>>(courses, HttpStatus.OK);
 		}
+		
+		if(name == null && id_teacher == null){
+			courses = _courseService.findAllCourses();
+			if(courses.isEmpty()){
+				return new ResponseEntity(HttpStatus.NO_CONTENT);
+			}
+		}
+		
+		return new ResponseEntity(courses, HttpStatus.OK);
+		
 	}
 	
+	// ------------------- POST Courses-----------------------------------------
 	
-	//POST
+	
+	
+	
+	
 	
 	//UPDATE
 	

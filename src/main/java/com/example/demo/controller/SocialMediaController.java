@@ -33,11 +33,9 @@ public class SocialMediaController {
 	// ------------------- GET SocialMedias-----------------------------------------
 
 	@RequestMapping(value = "/socialMedias", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<SocialMedia>> getSocialMedias(
-			@RequestParam(value = "name", required = false) String name) {
+	public ResponseEntity<List<SocialMedia>> getSocialMedias(@RequestParam(value = "name", required = false) String name) {
 
 		List<SocialMedia> socialMedias = new ArrayList<>();
-
 		if (name == null) {
 			socialMedias = _socialMediaService.findAllSocialMedias();
 
