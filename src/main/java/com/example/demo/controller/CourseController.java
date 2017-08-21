@@ -6,12 +6,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.demo.model.Course;
 import com.example.demo.service.CourseService;
@@ -37,13 +40,14 @@ public class CourseController {
 			courses = _courseService.findByIdTeacher(id_teacher);
 			if(courses.isEmpty()){
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
+				// You many decide to return HttpStatus.NOT_FOUND
 			}
 		}
 		
 		if(name != null){
 			Course course = _courseService.findByName(name);
 			if(course == null){
-				return new ResponseEntity(HttpStatus.NOT_FOUND);
+				return new ResponseEntity(new CustomErrorType("Course name " + name + " not found "), HttpStatus.NOT_FOUND);
 			}
 			courses.add(course);
 		}
@@ -52,6 +56,7 @@ public class CourseController {
 			courses = _courseService.findAllCourses();
 			if(courses.isEmpty()){
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
+				// You many decide to return HttpStatus.NOT_FOUND
 			}
 		}
 		
@@ -60,8 +65,28 @@ public class CourseController {
 	}
 	
 	// ------------------- POST Courses-----------------------------------------
-	
-	
+	@RequestMapping(value="/courses", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<?> createCourse(@RequestBody Course course, UriComponentsBuilder uriBuilder){
+		logger.info("Creating Course : {}", course);
+		
+		if(course.getName().equals(null) || course.getName().isEmpty()){
+			return new ResponseEntity(new CustomErrorType("Course name is required. "), HttpStatus.CONFLICT);
+		}
+		
+		if(_courseService.findByName(course.getName()) !=null){
+			logger.error("Unable to create. A Course with name {} already exist", course.getName());
+
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A SocialMedia with name " + course.getName() + " already exist."),
+					HttpStatus.CONFLICT);
+		}
+		
+		_courseService.saveCourse(course);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriBuilder.path("/v1/courses/{id}").buildAndExpand(course.getIdCourse()).toUri());
+		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+	}
 	
 	
 	
