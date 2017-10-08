@@ -26,30 +26,52 @@ public class DataBaseConfiguration {
 		return sessionfactoryBean;
 	}
 	
-	@Bean
+	
+	/*@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/platziprofesores");
+		dataSource.setUrl("jdbc:mysql://us-cdbr-iron-east-03.cleardb.net/heroku_7e6331b00d902dd");
+		dataSource.setUsername("bd4826c410bb3f");
+		dataSource.setPassword("e34b2d5d");
+		
+		return dataSource;
+	}*/
+	
+	@Bean
+	public DataSource dataSource(){
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");		
+		dataSource.setUrl("jdbc:mysql://db.secuencia24.com/test_db?useSSL=false");
+		dataSource.setUsername("test_db");
+		dataSource.setPassword("eKY9NeVaxYnm6ED6");
+		
+		/*dataSource.setUrl("jdbc:mysql://localhost:3306/platziprofesores");
 		dataSource.setUsername("platziprofesores");
 		dataSource.setPassword("platziprofesores");
+		
+		dataSource.setUrl("jdbc:mysql://db.secuencia24.com/test_db?useSSL=false");
+		dataSource.setUsername("test_db");
+		dataSource.setPassword("eKY9NeVaxYnm6ED6");
+		*/
+		
 		return dataSource;
 	}
+	
 	
 	public Properties hibernateProperties(){
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		properties.put("hibernate.show_sql", "true");
-
+		properties.put("show_sql", "true");
 		return properties;
 	}
 	
 	@Bean
 	@Autowired
-	public HibernateTransactionManager transactionManager(){
+	public HibernateTransactionManager transactionManager() {
 		HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
 		hibernateTransactionManager.setSessionFactory(sessionFactory().getObject());
 		return hibernateTransactionManager;
+	
 	}
-
 }
