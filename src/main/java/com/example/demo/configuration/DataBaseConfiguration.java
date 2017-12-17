@@ -42,14 +42,14 @@ public class DataBaseConfiguration {
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");		
-		dataSource.setUrl("jdbc:mysql://db.secuencia24.com/test_db?useSSL=false");
+		/*dataSource.setUrl("jdbc:mysql://db.secuencia24.com/test_db?useSSL=false");
 		dataSource.setUsername("test_db");
-		dataSource.setPassword("eKY9NeVaxYnm6ED6");
+		dataSource.setPassword("eKY9NeVaxYnm6ED6");*/
 		
-		/*dataSource.setUrl("jdbc:mysql://localhost:3306/platziprofesores");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/platziprofesores");
 		dataSource.setUsername("platziprofesores");
 		dataSource.setPassword("platziprofesores");
-		*/
+		
 		return dataSource;
 	}
 	

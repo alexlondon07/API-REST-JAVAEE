@@ -15,18 +15,15 @@ import com.example.demo.model.TeacherSocialMedia;
 public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao {
 
 	public SocialMediaDaoImp() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void saveSocialMedia(SocialMedia socialMedia) {
-		// TODO Auto-generated method stub
 		getSession().save(socialMedia);
 	}
 
 	@Override
 	public void deleteSocialMediaById(Long IdSocialMedia) {
-		// TODO Auto-generated method stub
 		SocialMedia socialMedia = findById(IdSocialMedia);
 		if(IdSocialMedia !=null){
 			getSession().delete(socialMedia);
@@ -35,25 +32,21 @@ public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao
 
 	@Override
 	public void updateSocialMedia(SocialMedia socialMedia) {
-		// TODO Auto-generated method stub
 		getSession().update(socialMedia);
 	}
 
 	@Override
 	public List<SocialMedia> findAllSocialMedias() {
-		// TODO Auto-generated method stub
 		return getSession().createQuery("from SocialMedia").list();
 	}
 
 	@Override
 	public SocialMedia findById(long IdSocialMedia) {
-		// TODO Auto-generated method stub
 		return getSession().get(SocialMedia.class, IdSocialMedia);
 	}
 
 	@Override
 	public SocialMedia findByName(String name) {
-		// TODO Auto-generated method stub
 		return (SocialMedia) getSession().createQuery(
 				"from SocialMedia where name = :name")
 				.setParameter("name", name).uniqueResult();
@@ -62,16 +55,38 @@ public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao
 	@Override
 	public TeacherSocialMedia findSocialMediaByIdAndName(Long idSocialMedia, String nickname) {
 		// TODO Auto-generated method stub
-		List<Object[]> objects =  (List<Object[]>) getSession().createQuery(
-				"from TeacherSocialMedia tsm join tms.socialMedia sm"
-				+ " where t.idSocialMedia = :idSocialMedia and tsm.nickname = :nickname")
+		List<Object[]> objects = getSession().createQuery(
+				"from TeacherSocialMedia tsm join tsm.socialMedia sm "
+				+ "where sm.idSocialMedia = :idSocialMedia and tsm.nickname = :nickname")
 				.setParameter("idSocialMedia", idSocialMedia)
-				.setParameter("nickname", nickname);
+				.setParameter("nickname", nickname).list();
+		if (objects.size() > 0) {
+			for (Object[] objects2 : objects) {
+				for (Object object : objects2) {
+					if (object instanceof TeacherSocialMedia) {
+						return (TeacherSocialMedia) object;
+					}
+				}
+			}
+		}
 		
-		if(objects.size() > 0){
-			for(Object[] objects2 :  objects){
-				for(Object object :  objects2){
-					if(object instanceof TeacherSocialMedia ){
+		return null;
+		
+	}
+
+	@Override
+	public TeacherSocialMedia findSocialMediaByIdTeacherAndIdSocialMedia(Long idTeacher, Long idSocialMedia) {
+		List<Object[]> objs = getSession().createQuery(
+				"from TeacherSocialMedia tsm join tsm.socialMedia sm "
+				+ "join tsm.teacher t where sm.idSocialMedia = :id_social_media "
+				+ "and t.idTeacher = :id_teacher")
+				.setParameter("id_social_media", idSocialMedia)
+				.setParameter("id_teacher", idTeacher).list();
+		
+		if (objs.size()>0) {
+			for (Object[] objects : objs) {
+				for (Object object : objects) {
+					if (object instanceof TeacherSocialMedia) {
 						return (TeacherSocialMedia) object;
 					}
 				}
@@ -79,5 +94,5 @@ public class SocialMediaDaoImp extends AbstractSession implements SocialMediaDao
 		}
 		return null;
 	}
-
+	
 }
