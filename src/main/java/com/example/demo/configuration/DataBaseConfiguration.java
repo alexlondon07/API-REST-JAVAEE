@@ -49,12 +49,7 @@ public class DataBaseConfiguration {
 		/*dataSource.setUrl("jdbc:mysql://localhost:3306/platziprofesores");
 		dataSource.setUsername("platziprofesores");
 		dataSource.setPassword("platziprofesores");
-		
-		dataSource.setUrl("jdbc:mysql://db.secuencia24.com/test_db?useSSL=false");
-		dataSource.setUsername("test_db");
-		dataSource.setPassword("eKY9NeVaxYnm6ED6");
 		*/
-		
 		return dataSource;
 	}
 	

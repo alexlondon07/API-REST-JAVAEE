@@ -42,7 +42,6 @@ public class SocialMedia implements Serializable {
 	}
 	public SocialMedia() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Long getIdSocialMedia() {
 		return idSocialMedia;
@@ -68,7 +67,4 @@ public class SocialMedia implements Serializable {
 	public void setTeacherSocialMedias(Set<TeacherSocialMedia> teacherSocialMedias) {
 		this.teacherSocialMedias = teacherSocialMedias;
 	}
-	
-	
-
 }

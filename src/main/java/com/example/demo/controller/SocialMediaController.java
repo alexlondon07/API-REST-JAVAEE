@@ -28,7 +28,7 @@ public class SocialMediaController {
 	public static final Logger logger = LoggerFactory.getLogger(SocialMediaController.class);
 
 	@Autowired
-	SocialMediaService _socialMediaService;
+	SocialMediaService socialMediaService;
 
 	// ------------------- GET SocialMedias-----------------------------------------
 
@@ -37,14 +37,14 @@ public class SocialMediaController {
 
 		List<SocialMedia> socialMedias = new ArrayList<>();
 		if (name == null) {
-			socialMedias = _socialMediaService.findAllSocialMedias();
+			socialMedias = socialMediaService.findAllSocialMedias();
 
 			if (socialMedias.isEmpty()) {
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<List<SocialMedia>>(socialMedias, HttpStatus.OK);
 		} else {
-			SocialMedia socialMedia = _socialMediaService.findByName(name);
+			SocialMedia socialMedia = socialMediaService.findByName(name);
 			if (socialMedia == null) {
 				return new ResponseEntity(new CustomErrorType("SocialMedia not found"), HttpStatus.NOT_FOUND);
 			}
@@ -61,7 +61,7 @@ public class SocialMediaController {
 			return new ResponseEntity(new CustomErrorType("idSocialMedia is required"), HttpStatus.CONFLICT);
 		}
 
-		SocialMedia socialMedia = _socialMediaService.findById(idSocialMedia);
+		SocialMedia socialMedia = socialMediaService.findById(idSocialMedia);
 		if (socialMedia == null) {
 			logger.error("idSocialMedia {} not found.", idSocialMedia);
 			return new ResponseEntity(
@@ -86,7 +86,7 @@ public class SocialMediaController {
 					new CustomErrorType("Unable to create. A SocialMedia with name " + socialMedia.getName() + " already exist."),
 					HttpStatus.CONFLICT);
 		}
-		_socialMediaService.saveSocialMedia(socialMedia);
+		socialMediaService.saveSocialMedia(socialMedia);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uriComponentsBuilder.path("/v1/socialMedias{id}").buildAndExpand(socialMedia.getIdSocialMedia()).toUri());
@@ -113,7 +113,7 @@ public class SocialMediaController {
 					HttpStatus.CONFLICT);
 		}
 
-		SocialMedia currentSocialMedia = _socialMediaService.findById(idSocialMedia);
+		SocialMedia currentSocialMedia = socialMediaService.findById(idSocialMedia);
 		if (currentSocialMedia == null) {
 			logger.error("Unable to update. SocialMedia with id {} not found.", idSocialMedia);
 			return new ResponseEntity(new CustomErrorType("Unable to upate. SocialMedia with id " + idSocialMedia + " not found."),
@@ -123,7 +123,7 @@ public class SocialMediaController {
 		currentSocialMedia.setName(socialMedia.getName());
 		currentSocialMedia.setIcon(socialMedia.getIcon());
 
-		_socialMediaService.updateSocialMedia(currentSocialMedia);
+		socialMediaService.updateSocialMedia(currentSocialMedia);
 		return new ResponseEntity<SocialMedia>(currentSocialMedia, HttpStatus.OK);
 	}
 
@@ -137,14 +137,14 @@ public class SocialMediaController {
 			return new ResponseEntity(new CustomErrorType("idSocialMedia is required"), HttpStatus.CONFLICT);
 		}
 
-		SocialMedia socialMedia = _socialMediaService.findById(idSocialMedia);
+		SocialMedia socialMedia = socialMediaService.findById(idSocialMedia);
 		if (socialMedia == null) {
 			logger.error("Unable to delete. SocialMedia with id {} not found.", idSocialMedia);
 			return new ResponseEntity(new CustomErrorType("Unable to delete. SocialMedia with id " + idSocialMedia + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
 
-		_socialMediaService.deleteSocialMediaById(idSocialMedia);
+		socialMediaService.deleteSocialMediaById(idSocialMedia);
 		return new ResponseEntity<SocialMedia>(HttpStatus.OK);
 	}
 	
@@ -155,7 +155,7 @@ public class SocialMediaController {
 	 * @return
 	 */
 	public boolean isSocialMediaExist(SocialMedia socialMedia){
-		if(_socialMediaService.findByName(socialMedia.getName()) !=null){
+		if(socialMediaService.findByName(socialMedia.getName()) !=null){
 			logger.error("Unable to create. A SocialMedia with name {} already exist", socialMedia.getName());
 			return true;
 		}

@@ -48,7 +48,6 @@ public class Teacher implements Serializable {
 	}
 	public Teacher() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Long getIdTeacher() {
 		return idTeacher;

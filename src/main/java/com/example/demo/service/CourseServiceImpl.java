@@ -15,48 +15,41 @@ import com.example.demo.model.Course;
 public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
-	private CourseDao _courseDao;
+	private CourseDao courseDao;
 
 	@Override
 	public void saveCourse(Course course) {
-		// TODO Auto-generated method stub
-		_courseDao.saveCourse(course);
+		courseDao.saveCourse(course);
 	}
 
 	@Override
-	public void deleteCourseById(Long IdCourse) {
-		// TODO Auto-generated method stub
-		_courseDao.deleteCourseById(IdCourse);
+	public void deleteCourseById(Long idCourse) {
+		courseDao.deleteCourseById(idCourse);
 	}
 
 	@Override
 	public void updateCourse(Course socialMedia) {
-		// TODO Auto-generated method stub
-		_courseDao.updateCourse(socialMedia);
+		courseDao.updateCourse(socialMedia);
 	}
 
 	@Override
 	public List<Course> findAllCourses() {
-		// TODO Auto-generated method stub
-		return _courseDao.findAllCourses();
+		return courseDao.findAllCourses();
 	}
 
 	@Override
-	public Course findById(long IdCourse) {
-		// TODO Auto-generated method stub
-		return _courseDao.findById(IdCourse);
+	public Course findById(long idCourse) {
+		return courseDao.findById(idCourse);
 	}
 
 	@Override
 	public Course findByName(String name) {
-		// TODO Auto-generated method stub
-		return _courseDao.findByName(name);
+		return courseDao.findByName(name);
 	}
 
 	@Override
 	public List<Course> findByIdTeacher(Long idTeacher) {
-		// TODO Auto-generated method stub
-		return _courseDao.findByIdTeacher(idTeacher);
+		return courseDao.findByIdTeacher(idTeacher);
 	}
 
 }

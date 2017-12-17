@@ -33,7 +33,7 @@ import com.example.demo.util.CustomErrorType;
 public class TeacherController {
 
 	@Autowired
-	private TeacherService _teacherService;
+	private TeacherService teacherService;
 	
 	// ------------------- GET Teacher-----------------------------------------
 	@RequestMapping(value = "/teachers", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -41,7 +41,7 @@ public class TeacherController {
 		List<Teacher> teachers = new ArrayList<Teacher>();
 		
 		if (name == null) {
-			teachers = _teacherService.findAllTeachers();
+			teachers = teacherService.findAllTeachers();
 	        if (teachers.isEmpty()) {
 	            return new ResponseEntity(HttpStatus.NO_CONTENT);
 	            // You many decide to return HttpStatus.NOT_FOUND
@@ -49,7 +49,7 @@ public class TeacherController {
 		   
 			return new ResponseEntity<List<Teacher>>(teachers, HttpStatus.OK);
 		} else {
-			Teacher teacher = _teacherService.findByName(name);
+			Teacher teacher = teacherService.findByName(name);
 			if (teacher == null) {
 				return new ResponseEntity(HttpStatus.NOT_FOUND);
 			}
@@ -62,7 +62,7 @@ public class TeacherController {
 	// ------------------- GET Teacher Find By Id-----------------------------------------
 	@RequestMapping(value = "/teachers/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Teacher> getCourseById(@PathVariable("id") Long id){
-		Teacher teacher = _teacherService.findById(id);
+		Teacher teacher = teacherService.findById(id);
         if (teacher == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
             // You many decide to return HttpStatus.NOT_FOUND
@@ -86,7 +86,7 @@ public class TeacherController {
 			return new ResponseEntity(new CustomErrorType("Please select a file to upload"), HttpStatus.NO_CONTENT);
 		}
 		
-		Teacher teacher = _teacherService.findById(idTeacher);
+		Teacher teacher = teacherService.findById(idTeacher);
 		if (teacher == null) {
 			return new ResponseEntity(new CustomErrorType("Teacher with id_teacher: " + idTeacher + " not dfound"), HttpStatus.NOT_FOUND);
 		}
@@ -112,7 +112,7 @@ public class TeacherController {
 			Path path = Paths.get(TEACHER_UPLOADED_FOLDER + fileName);
 			Files.write(path, bytes);
 			
-			_teacherService.updateTeacher(teacher);
+			teacherService.updateTeacher(teacher);
 			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -132,14 +132,14 @@ public class TeacherController {
 	// ------------------- DELETE Teacher-----------------------------------------
 	@RequestMapping(value = "/teachers/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id) {
-		Teacher teacher = _teacherService.findById(id);
+		Teacher teacher = teacherService.findById(id);
         if (teacher == null) {
         	
             return new ResponseEntity(new CustomErrorType("Unable to delete. teacher with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
         
-        _teacherService.deleteTeacherById(id);
+        teacherService.deleteTeacherById(id);
         return new ResponseEntity<Teacher>(HttpStatus.NO_CONTENT);
     }
 	

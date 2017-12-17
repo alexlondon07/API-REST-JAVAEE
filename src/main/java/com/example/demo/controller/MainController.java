@@ -10,7 +10,7 @@ public class MainController {
 	@RequestMapping("/")
 	@ResponseBody
 	public String index(){
-		String response = "Bienvenido a nuestra API REST con Spring";
+		String response = "Welcome to our REST API with Spring";
 		return response;
 	}
 

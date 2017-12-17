@@ -16,47 +16,40 @@ import com.example.demo.model.TeacherSocialMedia;
 public class SocialMediaServiceImpl implements SocialMediaService {
 
 	@Autowired
-	private SocialMediaDao _socialMediaDao;
+	private SocialMediaDao socialMediaDao;
 	
 	@Override
 	public void saveSocialMedia(SocialMedia socialMedia) {
-		// TODO Auto-generated method stub
-		_socialMediaDao.saveSocialMedia(socialMedia);
+		socialMediaDao.saveSocialMedia(socialMedia);
 	}
 
 	@Override
 	public void deleteSocialMediaById(Long IdSocialMedia) {
-		// TODO Auto-generated method stub
-		_socialMediaDao.deleteSocialMediaById(IdSocialMedia);
+		socialMediaDao.deleteSocialMediaById(IdSocialMedia);
 	}
 
 	@Override
 	public void updateSocialMedia(SocialMedia socialMedia) {
-		// TODO Auto-generated method stub
-		_socialMediaDao.updateSocialMedia(socialMedia);
+		socialMediaDao.updateSocialMedia(socialMedia);
 	}
 
 	@Override
 	public List<SocialMedia> findAllSocialMedias() {
-		// TODO Auto-generated method stub
-		return _socialMediaDao.findAllSocialMedias();
+		return socialMediaDao.findAllSocialMedias();
 	}
 
 	@Override
 	public SocialMedia findById(long IdSocialMedia) {
-		// TODO Auto-generated method stub
-		return _socialMediaDao.findById(IdSocialMedia);
+		return socialMediaDao.findById(IdSocialMedia);
 	}
 
 	@Override
 	public SocialMedia findByName(String name) {
-		// TODO Auto-generated method stub
-		return _socialMediaDao.findByName(name);
+		return socialMediaDao.findByName(name);
 	}
 
 	@Override
 	public TeacherSocialMedia findSocialMediaByIdAndName(Long idSocialMedia, String nickname) {
-		// TODO Auto-generated method stub
-		return _socialMediaDao.findSocialMediaByIdAndName(idSocialMedia, nickname);
+		return socialMediaDao.findSocialMediaByIdAndName(idSocialMedia, nickname);
 	}
 }

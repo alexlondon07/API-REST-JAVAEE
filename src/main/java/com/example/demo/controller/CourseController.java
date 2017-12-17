@@ -28,17 +28,17 @@ public class CourseController {
 	public static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 	
 	@Autowired
-	CourseService _courseService;
+	CourseService courseService;
 	
 	// ------------------- GET Courses-----------------------------------------
 	
 	@RequestMapping(value="/courses", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<List<Course>> getCourses(@RequestParam(value="name", required=false) String name, @RequestParam(value = "id_teacher", required = false) Long id_teacher){
+	public ResponseEntity<List<Course>> getCourses(@RequestParam(value="name", required=false) String name, @RequestParam(value = "id_teacher", required = false) Long idTeacher){
 		
 		List<Course> courses = new ArrayList<>();
 		
-		if(id_teacher !=null){
-			courses = _courseService.findByIdTeacher(id_teacher);
+		if(idTeacher !=null){
+			courses = courseService.findByIdTeacher(idTeacher);
 			if(courses.isEmpty()){
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 				// You many decide to return HttpStatus.NOT_FOUND
@@ -46,15 +46,15 @@ public class CourseController {
 		}
 		
 		if(name != null){
-			Course course = _courseService.findByName(name);
+			Course course = courseService.findByName(name);
 			if(course == null){
 				return new ResponseEntity(new CustomErrorType("Course name " + name + " not found "), HttpStatus.NOT_FOUND);
 			}
 			courses.add(course);
 		}
 		
-		if(name == null && id_teacher == null){
-			courses = _courseService.findAllCourses();
+		if(name == null && idTeacher == null){
+			courses = courseService.findAllCourses();
 			if(courses.isEmpty()){
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 				// You many decide to return HttpStatus.NOT_FOUND
@@ -70,7 +70,7 @@ public class CourseController {
 	public ResponseEntity<?> createCourse(@RequestBody Course course, UriComponentsBuilder uriBuilder){
 		logger.info("Creating Course : {}", course);
 		
-		if(course.getName().equals(null) || course.getName().isEmpty()){
+		if(course.getName() == null || course.getName().isEmpty()){
 			return new ResponseEntity(new CustomErrorType("Course name is required. "), HttpStatus.CONFLICT);
 		}
 		
@@ -80,7 +80,7 @@ public class CourseController {
 					HttpStatus.CONFLICT);
 		}
 		
-		_courseService.saveCourse(course);
+		courseService.saveCourse(course);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uriBuilder.path("/v1/courses/{id}").buildAndExpand(course.getIdCourse()).toUri());
@@ -93,7 +93,7 @@ public class CourseController {
 	public ResponseEntity<Course> updateCouse(@PathVariable("id") Long id, @RequestBody Course course){
 		logger.info("Updating Course with id {}", id);
 		
-		if (id.equals(null) || id <= 0) {
+		if (id == null || id <= 0) {
 			return new ResponseEntity(new CustomErrorType("idCourse is required"), HttpStatus.CONFLICT);
 		}
 		
@@ -107,7 +107,7 @@ public class CourseController {
 					HttpStatus.CONFLICT);
 		}
 		
-		Course currentCourse = _courseService.findById(id);
+		Course currentCourse = courseService.findById(id);
 		if(currentCourse == null){
 			return new ResponseEntity(
 					new CustomErrorType("Unable to create. A Course with id " + id + " already exist."),
@@ -118,7 +118,7 @@ public class CourseController {
 		currentCourse.setProject(course.getThemes());
 		currentCourse.setProject(course.getProject());
 		
-		_courseService.updateCourse(currentCourse);
+		courseService.updateCourse(currentCourse);
 		return new ResponseEntity<Course>(currentCourse, HttpStatus.OK);
 
 	}
@@ -128,11 +128,11 @@ public class CourseController {
 	public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id){
 		logger.info("fetching % Deleting Course with id {} ", id);
 		
-		if (id.equals(null) || id <= 0) {
+		if (id == null || id <= 0) {
 			return new ResponseEntity(new CustomErrorType("idCourse is required"), HttpStatus.CONFLICT);
 		}
 		
-		Course course = _courseService.findById(id);
+		Course course = courseService.findById(id);
 		
 		if(course == null){
 			return new ResponseEntity(
@@ -140,7 +140,7 @@ public class CourseController {
 					HttpStatus.NOT_FOUND);
 		}
 		
-		_courseService.deleteCourseById(id);
+		courseService.deleteCourseById(id);
 		return new ResponseEntity<Course>(HttpStatus.OK);
 		
 	}
@@ -151,7 +151,7 @@ public class CourseController {
 	 * @return
 	 */
 	public boolean isCourseExist(Course course){
-		if(_courseService.findByName(course.getName()) !=null){
+		if(courseService.findByName(course.getName()) !=null){
 			logger.error("Unable to create. A Course with name {} already exist", course.getName());
 			return true;
 		}

@@ -15,43 +15,37 @@ import com.example.demo.model.Teacher;
 public class TeacherServiceImpl implements TeacherService {
 
 	@Autowired
-	private TeacherDao _teacherDao;
+	private TeacherDao teacherDao;
 	
 	@Override
 	public void saveTeacher(Teacher teacher) {
-		// TODO Auto-generated method stub
-		_teacherDao.saveTeacher(teacher);
+		teacherDao.saveTeacher(teacher);
 	}
 
 	@Override
 	public void deleteTeacherById(Long idTeacher) {
-		// TODO Auto-generated method stub
-		_teacherDao.deleteTeacherById(idTeacher);
+		teacherDao.deleteTeacherById(idTeacher);
 		
 	}
 
 	@Override
 	public void updateTeacher(Teacher teacher) {
-		// TODO Auto-generated method stub
-		_teacherDao.updateTeacher(teacher);
+		teacherDao.updateTeacher(teacher);
 	}
 
 	@Override
 	public List<Teacher> findAllTeachers() {
-		// TODO Auto-generated method stub
-		return _teacherDao.findAllTeachers();
+		return teacherDao.findAllTeachers();
 	}
 
 	@Override
 	public Teacher findById(Long idTeacher) {
-		// TODO Auto-generated method stub
-		return _teacherDao.findById(idTeacher);
+		return teacherDao.findById(idTeacher);
 	}
 
 	@Override
 	public Teacher findByName(String name) {
-		// TODO Auto-generated method stub
-		return _teacherDao.findByName(name);
+		return teacherDao.findByName(name);
 	}
 
 }

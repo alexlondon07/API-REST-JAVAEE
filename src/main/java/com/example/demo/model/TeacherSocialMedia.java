@@ -42,7 +42,6 @@ public class TeacherSocialMedia implements Serializable {
 	}
 	public TeacherSocialMedia() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Long getIdTeacherSocialMedia() {
 		return idTeacherSocialMedia;
