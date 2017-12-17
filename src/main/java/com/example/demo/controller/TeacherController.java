@@ -43,7 +43,7 @@ public class TeacherController {
 	private SocialMediaService socialMediaService;
 	
 	
-	// ------------------- GET Teacher-----------------------------------------
+	// ------------------- GET Teacher----------------------------------------------------------------------------------
 	@RequestMapping(value = "/teachers", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<List<Teacher>> getTeachers(@RequestParam(value="name", required=false) String name){
 		List<Teacher> teachers = new ArrayList<Teacher>();
@@ -68,7 +68,7 @@ public class TeacherController {
 		}
     }
 	
-	// ------------------- GET Teacher Find By Id-----------------------------------------
+	// ------------------- GET Teacher Find By Id----------------------------------------------------------------------------------
 	@RequestMapping(value = "/teachers/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<Teacher> getCourseById(@PathVariable("id") Long id){
 		
@@ -80,7 +80,7 @@ public class TeacherController {
     }
 	
 	
-	// ------------------- DELETE Teacher-----------------------------------------
+	// ------------------- DELETE Teacher-------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "/teachers/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id) {
 		
@@ -96,7 +96,7 @@ public class TeacherController {
     }
 	
 	
-	// ------------------- POST Teacher Create Teacher Image-----------------------------------------
+	// ------------------- POST Teacher Create Teacher Image----------------------------------------------------------------------------------
 	public static final String TEACHER_UPLOADED_FOLDER ="images/teachers/";
 	@RequestMapping(value="/teachers/images", method = RequestMethod.POST, headers=("content-type=multipart/form-data"))
 	public ResponseEntity<byte[]> uploadTeacherImage(@RequestParam("id_teacher") Long idTeacher, 
@@ -153,7 +153,7 @@ public class TeacherController {
 	}
 	
 
-	// ------------------- Get Image-----------------------------------------
+	// ------------------- Get Image---------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value="/teachers/{id_teacher}/images", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getTeacherImage(@PathVariable("id_teacher") Long idTeacher){
 		
@@ -185,7 +185,7 @@ public class TeacherController {
 	
 	}
 
-	// ------------------- Delete Image-----------------------------------------
+	// ------------------- Delete Image------------------------------------------------------------------------------------------------------
 	@RequestMapping(value="/teachers/{id_teacher}/images", method = RequestMethod.DELETE,headers = "Accept=application/json")
 	public ResponseEntity<?> deleteTeacherImage(@PathVariable("id_teacher") Long idTeacher){
 		
@@ -215,7 +215,7 @@ public class TeacherController {
 		return new ResponseEntity<Teacher>(HttpStatus.NO_CONTENT);
 	}
 	
-	// ------------------- 	Assign Teacher Social Medias -----------------------------------------
+	// ------------------- 	Assign Teacher Social Medias ----------------------------------------------------------------------------------
 	@RequestMapping(value="teachers/socialMedias", method = RequestMethod.PATCH, headers = "Accept=application/json")
 	public ResponseEntity<?> assignTeacherSocialMedia(@RequestBody Teacher teacher, UriComponentsBuilder uriComponentsBuilder){
 		
