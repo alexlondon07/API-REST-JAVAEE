@@ -25,12 +25,12 @@ import com.example.demo.util.CustomErrorType;
 @Controller
 @RequestMapping("/v1")
 public class CourseController {
+	
 	public static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 	
 	@Autowired
 	CourseService courseService;
 	
-	// ------------------- GET Courses-----------------------------------------
 	
 	@RequestMapping(value="/courses", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<List<Course>> getCourses(@RequestParam(value="name", required=false) String name, @RequestParam(value = "id_teacher", required = false) Long idTeacher){
@@ -40,8 +40,7 @@ public class CourseController {
 		if(idTeacher !=null){
 			courses = courseService.findByIdTeacher(idTeacher);
 			if(courses.isEmpty()){
-				return new ResponseEntity(HttpStatus.NO_CONTENT);
-				// You many decide to return HttpStatus.NOT_FOUND
+				return new ResponseEntity(HttpStatus.NOT_FOUND);
 			}
 		}
 		
@@ -56,8 +55,7 @@ public class CourseController {
 		if(name == null && idTeacher == null){
 			courses = courseService.findAllCourses();
 			if(courses.isEmpty()){
-				return new ResponseEntity(HttpStatus.NO_CONTENT);
-				// You many decide to return HttpStatus.NOT_FOUND
+				return new ResponseEntity(HttpStatus.NOT_FOUND);
 			}
 		}
 		
@@ -65,7 +63,8 @@ public class CourseController {
 		
 	}
 	
-	// ------------------- POST Courses-----------------------------------------
+	
+	// ------------------- POST Courses----------------------------------------------------------------------------------
 	@RequestMapping(value="/courses", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<?> createCourse(@RequestBody Course course, UriComponentsBuilder uriBuilder){
 		logger.info("Creating Course : {}", course);
@@ -88,9 +87,10 @@ public class CourseController {
 	}
 	
 
-	// ------------------- UPDATE Courses-----------------------------------------
+	// ------------------- UPDATE Courses----------------------------------------------------------------------------------
 	@RequestMapping(value = "/courses/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Course> updateCouse(@PathVariable("id") Long id, @RequestBody Course course){
+		
 		logger.info("Updating Course with id {}", id);
 		
 		if (id == null || id <= 0) {
@@ -123,9 +123,11 @@ public class CourseController {
 
 	}
 	
-	// ------------------- DELETE Courses-----------------------------------------
+	
+	// ------------------- DELETE Courses----------------------------------------------------------------------------------
 	@RequestMapping(value = "/courses/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id){
+		
 		logger.info("fetching % Deleting Course with id {} ", id);
 		
 		if (id == null || id <= 0) {

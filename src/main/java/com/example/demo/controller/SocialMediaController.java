@@ -31,7 +31,6 @@ public class SocialMediaController {
 	SocialMediaService socialMediaService;
 
 	// ------------------- GET SocialMedias-----------------------------------------
-
 	@RequestMapping(value = "/socialMedias", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<List<SocialMedia>> getSocialMedias(@RequestParam(value = "name", required = false) String name) {
 
@@ -42,37 +41,43 @@ public class SocialMediaController {
 			if (socialMedias.isEmpty()) {
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
+			
 			return new ResponseEntity<List<SocialMedia>>(socialMedias, HttpStatus.OK);
+			
 		} else {
+			
 			SocialMedia socialMedia = socialMediaService.findByName(name);
 			if (socialMedia == null) {
 				return new ResponseEntity(new CustomErrorType("SocialMedia not found"), HttpStatus.NOT_FOUND);
 			}
 			socialMedias.add(socialMedia);
+			
 			return new ResponseEntity<List<SocialMedia>>(socialMedias, HttpStatus.OK);
 		}
 	}
 
 	// ------------------- GET SocialMedia By Id-----------------------------------------
-
 	@RequestMapping(value = "/socialMedias/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<SocialMedia> getSocialMediaById(@PathVariable("id") Long idSocialMedia) {
+		
 		if (idSocialMedia == null || idSocialMedia <= 0) {
 			return new ResponseEntity(new CustomErrorType("idSocialMedia is required"), HttpStatus.CONFLICT);
 		}
 
 		SocialMedia socialMedia = socialMediaService.findById(idSocialMedia);
 		if (socialMedia == null) {
+			
 			logger.error("idSocialMedia {} not found.", idSocialMedia);
+			
 			return new ResponseEntity(
 					new CustomErrorType("SocialMedia with idSocialMedia " + idSocialMedia + " not found"),
 					HttpStatus.NOT_FOUND);
 		}
+		
 		return new ResponseEntity<SocialMedia>(socialMedia, HttpStatus.OK);
 	}
 
 	// ------------------- POST SocialMedia-----------------------------------------
-
 	@RequestMapping(value = "/socialMedias", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<?> createSocialMedia(@RequestBody SocialMedia socialMedia, UriComponentsBuilder uriComponentsBuilder) {
 		logger.info("Creating SocialMedia : {}", socialMedia);
@@ -93,10 +98,11 @@ public class SocialMediaController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
+	
 	// ------------------- UPDATE SocialMedia-----------------------------------------
-
 	@RequestMapping(value = "/socialMedias/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<SocialMedia> updateSocialMedia(@PathVariable("id") Long idSocialMedia, @RequestBody SocialMedia socialMedia) {
+		
 		logger.info("Updating SocialMedia with id {}", idSocialMedia);
 		
 		if (idSocialMedia == null || idSocialMedia <= 0) {
@@ -128,9 +134,9 @@ public class SocialMediaController {
 	}
 
 	// ------------------- DELETE SocialMedia -----------------------------------------
-
 	@RequestMapping(value = "/socialMedias/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<SocialMedia> deleteSocialMedia(@PathVariable("id") Long idSocialMedia) {
+		
 		logger.info("Fetching & Deleting SocialMedia with id {}", idSocialMedia);
 		
 		if (idSocialMedia == null || idSocialMedia <= 0) {
@@ -145,6 +151,7 @@ public class SocialMediaController {
 		}
 
 		socialMediaService.deleteSocialMediaById(idSocialMedia);
+		
 		return new ResponseEntity<SocialMedia>(HttpStatus.OK);
 	}
 	

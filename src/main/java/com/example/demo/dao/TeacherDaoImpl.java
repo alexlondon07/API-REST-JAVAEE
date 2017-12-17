@@ -23,9 +23,7 @@ public class TeacherDaoImpl extends AbstractSession implements TeacherDao {
 		Teacher teacher = findById(idTeacher);
 		if(idTeacher != null){
 			
-			/**
-			 * Eliminamos todas las socialMedias de un Teacher
-			 */
+			//Eliminamos todas las socialMedias de un Teacher
 			Iterator<TeacherSocialMedia> i = teacher.getTeacherSocialMedias().iterator();
 			while (i.hasNext()) {
 				TeacherSocialMedia teacherSocialMedia = i.next();
@@ -33,9 +31,8 @@ public class TeacherDaoImpl extends AbstractSession implements TeacherDao {
 				getSession().delete(teacherSocialMedia);
 			}
 			teacher.getTeacherSocialMedias().clear();
-			/**
-			 * Eliminamos nuestro Teacher
-			 */
+			
+			// Eliminamos nuestro Teacher
 			getSession().delete(teacher);
 		}
 	}
