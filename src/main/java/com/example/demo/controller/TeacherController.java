@@ -11,7 +11,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.demo.model.Course;
 import com.example.demo.model.SocialMedia;
 import com.example.demo.model.Teacher;
 import com.example.demo.model.TeacherSocialMedia;
@@ -35,6 +40,8 @@ import com.example.demo.util.CustomErrorType;
 @Controller
 @RequestMapping(value="/v1")
 public class TeacherController {
+	
+	public static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
 
 	@Autowired
 	private TeacherService teacherService;
@@ -95,6 +102,31 @@ public class TeacherController {
         return new ResponseEntity<Teacher>(HttpStatus.NO_CONTENT);
     }
 	
+	
+	
+	//POST
+	@RequestMapping(value="/teacher", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher, UriComponentsBuilder uriBuilder){
+		
+		logger.info("Creating Teacher : {}", teacher);
+		
+		if(teacher.getName() == null || teacher.getName().isEmpty()){
+			return new ResponseEntity(new CustomErrorType("Teacher name is required. "), HttpStatus.CONFLICT);
+		}
+		
+		if(isTeacherExist(teacher)){
+			return new ResponseEntity(
+					new CustomErrorType("Unable to create. A Teacher with name " + teacher.getName() + " already exist."),
+					HttpStatus.CONFLICT);
+		}
+		
+		teacherService.saveTeacher(teacher);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriBuilder.path("/v1/teachers/{id}").buildAndExpand(teacher.getIdTeacher()).toUri());
+		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+	}
+
 	
 	// ------------------- POST Teacher Create Teacher Image----------------------------------------------------------------------------------
 	public static final String TEACHER_UPLOADED_FOLDER ="images/teachers/";
@@ -305,4 +337,16 @@ public class TeacherController {
 		return new ResponseEntity<Teacher>(teacherSaved, HttpStatus.OK);
 	}
 	
+	/**
+	 * Metodo para validar si un teacher ya existe en la bd
+	 * @param teacher
+	 * @return
+	 */
+	public boolean isTeacherExist(Teacher teacher){
+		if(teacherService.findByName(teacher.getName()) !=null){
+			logger.error("Unable to create. A Teacher with name {} already exist", teacher.getName());
+			return true;
+		}
+		return false;
+	}	
 }
